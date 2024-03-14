@@ -1,0 +1,8 @@
+name: 'core-cloud-github-status-check-action'
+description:
+  'GitHub Action that enables updating a GitHub commit with a status check.'
+author: 'ukhomeoffice'
+
+runs:
+  using: node20
+  main: dist/index.js
