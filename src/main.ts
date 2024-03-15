@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { ActionInputs } from './helpers/actionInputs'
+import { ActionInputResult, ActionInputs } from './helpers/actionInputs'
 
 /**
  * The main function for the action.
@@ -8,7 +8,7 @@ import { ActionInputs } from './helpers/actionInputs'
 export async function run(): Promise<void> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const inputs: ActionInputs = ActionInputs()
+    const inputs: ActionInputResult = ActionInputs()
 
     // Perform computation
   } catch (error) {

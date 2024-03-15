@@ -61,33 +61,33 @@ describe('action', () => {
     expect(setFailedMock).not.toHaveBeenCalled()
   })
 
-    it('should set failed with no token set', async () => {
-      getInputMock.mockImplementation((name: string): string => {
-        switch (name) {
-          case 'token':
-            return ''
-          case 'state':
-            return 'success'
-          case 'context':
-            return 'context'
-          case 'description':
-            return 'description'
-          case 'sha':
-            return '012345678901234567890123456789abcdefabcd'
-          case 'owner':
-            return 'owner'
-          case 'repo':
-            return 'repo'
-          default:
-            return ''
-        }
-      })
-
-      await main.run()
-
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).toHaveBeenCalledWith('Input \'token\' is required.')
+  it('should set failed with no token set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return ''
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '012345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
     })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith("Input 'token' is required.")
+  })
 
   it('should set failed with invalid state set', async () => {
     getInputMock.mockImplementation((name: string): string => {
@@ -114,7 +114,9 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'state\', must be one of \'success\', \'failure\', \'error\', \'pending\'.')
+    expect(setFailedMock).toHaveBeenCalledWith(
+      "Invalid value for input 'state', must be one of 'success', 'failure', 'error', 'pending'."
+    )
   })
 
   it('should set failed with invalid context set', async () => {
@@ -142,7 +144,7 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Input \'context\' is required.')
+    expect(setFailedMock).toHaveBeenCalledWith("Input 'context' is required.")
   })
 
   it('should set failed with no sha', async () => {
@@ -170,7 +172,9 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'sha\', must be a valid SHA-1 hash.')
+    expect(setFailedMock).toHaveBeenCalledWith(
+      "Invalid value for input 'sha', must be a valid SHA-1 hash."
+    )
   })
 
   it('should set failed with invalid sha length', async () => {
@@ -198,7 +202,9 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'sha\', must be a valid SHA-1 hash.')
+    expect(setFailedMock).toHaveBeenCalledWith(
+      "Invalid value for input 'sha', must be a valid SHA-1 hash."
+    )
   })
 
   it('should set failed with invalid sha', async () => {
@@ -226,7 +232,9 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'sha\', must be a valid SHA-1 hash.')
+    expect(setFailedMock).toHaveBeenCalledWith(
+      "Invalid value for input 'sha', must be a valid SHA-1 hash."
+    )
   })
 
   it('should set failed with no owner set', async () => {
@@ -254,7 +262,7 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Input \'owner\' is required.')
+    expect(setFailedMock).toHaveBeenCalledWith("Input 'owner' is required.")
   })
 
   it('should set failed with no repo set', async () => {
@@ -282,7 +290,6 @@ describe('action', () => {
     await main.run()
 
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Input \'repo\' is required.')
+    expect(setFailedMock).toHaveBeenCalledWith("Input 'repo' is required.")
   })
-
 })

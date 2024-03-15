@@ -5,11 +5,14 @@ author: 'ukhomeoffice'
 
 inputs:
   token:
-    description: 'GitHub Token to use for the status check. Defaults to GITHUB.TOKEN.'
+    description:
+      'GitHub Token to use for the status check. Defaults to GITHUB.TOKEN.'
     required: false
     default: ${{ github.token }}
   state:
-    description: 'The state of the status check. One of success, error, failure, or pending.'
+    description:
+      'The state of the status check. One of success, error, failure, or
+      pending.'
     required: true
   context:
     description: 'The name displayed for the status check.'
@@ -18,11 +21,13 @@ inputs:
     description: 'A short description of the status check.'
     required: false
   sha:
-    description: 'The commit SHA to update with the status check. Defaults to GITHUB.SHA.'
+    description:
+      'The commit SHA to update with the status check. Defaults to GITHUB.SHA.'
     required: false
     default: ${{ github.sha }}
   owner:
-    description: 'The owner of the repository. Defaults to GITHUB.REPOSITORY_OWNER.'
+    description:
+      'The owner of the repository. Defaults to GITHUB.REPOSITORY_OWNER.'
     required: false
     default: ${{ github.repository_owner }}
   repo:
