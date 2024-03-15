@@ -24705,6 +24705,80 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 3133:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActionInputs = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const ActionInputs = () => {
+    const hasValidState = (name, input) => {
+        const valid = ['success', 'failure', 'error', 'pending'].includes(input);
+        if (!valid) {
+            throw new Error(`Invalid value for input '${name}', must be one of 'success', 'failure', 'error', 'pending'.`);
+        }
+        return true;
+    };
+    const hasValidSha = (name, input) => {
+        if (!/^[a-f0-9]{40}$/i.test(input)) {
+            throw new Error(`Invalid value for input '${name}', must be a valid SHA-1 hash.`);
+        }
+        return true;
+    };
+    const hasValue = (name, input) => {
+        if (isUndefinedOrEmpty(input)) {
+            throw new Error(`Input '${name}' is required.`);
+        }
+        return true;
+    };
+    const parseInput = (name, required, validate) => {
+        const value = core.getInput(name, { required });
+        if (!validate(name, value)) {
+            throw new Error(`Invalid value for input '${name}'.`);
+        }
+        return value;
+    };
+    const isUndefinedOrEmpty = (input) => input === undefined || input === '';
+    return {
+        token: parseInput('token', false, hasValue),
+        state: parseInput('state', true, hasValidState),
+        context: parseInput('context', true, hasValue),
+        description: parseInput('description', false, () => true),
+        sha: parseInput('sha', false, hasValidSha),
+        owner: parseInput('owner', false, hasValue),
+        repo: parseInput('repo', false, hasValue)
+    };
+};
+exports.ActionInputs = ActionInputs;
+
+
+/***/ }),
+
 /***/ 399:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -24736,12 +24810,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const actionInputs_1 = __nccwpck_require__(3133);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const inputs = (0, actionInputs_1.ActionInputs)();
         // Perform computation
     }
     catch (error) {
