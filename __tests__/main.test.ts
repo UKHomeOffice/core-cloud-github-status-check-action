@@ -14,9 +14,6 @@ import * as main from '../src/main'
 // Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
 
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
-
 // Mock the GitHub Actions core library
 let debugMock: jest.SpiedFunction<typeof core.debug>
 let errorMock: jest.SpiedFunction<typeof core.error>
@@ -35,8 +32,257 @@ describe('action', () => {
     setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
   })
 
-  // Add dummy test to pass CI - this should be replaced during implementation.
-  it('should pass', async () => {
-    expect(true).toBe(true)
+  it('should pass with appropriate inputs', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        // for each input in action.yml, return a string
+        case 'token':
+          return 'token'
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '012345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).not.toHaveBeenCalled()
   })
+
+    it('should set failed with no token set', async () => {
+      getInputMock.mockImplementation((name: string): string => {
+        switch (name) {
+          case 'token':
+            return ''
+          case 'state':
+            return 'success'
+          case 'context':
+            return 'context'
+          case 'description':
+            return 'description'
+          case 'sha':
+            return '012345678901234567890123456789abcdefabcd'
+          case 'owner':
+            return 'owner'
+          case 'repo':
+            return 'repo'
+          default:
+            return ''
+        }
+      })
+
+      await main.run()
+
+      expect(runMock).toHaveReturned()
+      expect(setFailedMock).toHaveBeenCalledWith('Input \'token\' is required.')
+    })
+
+  it('should set failed with invalid state set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'UNKNOWN'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '012345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'state\', must be one of \'success\', \'failure\', \'error\', \'pending\'.')
+  })
+
+  it('should set failed with invalid context set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'success'
+        case 'context':
+          return ''
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '012345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Input \'context\' is required.')
+  })
+
+  it('should set failed with no sha', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return ''
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'sha\', must be a valid SHA-1 hash.')
+  })
+
+  it('should set failed with invalid sha length', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '1'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'sha\', must be a valid SHA-1 hash.')
+  })
+
+  it('should set failed with invalid sha', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return 'ZZZ345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Invalid value for input \'sha\', must be a valid SHA-1 hash.')
+  })
+
+  it('should set failed with no owner set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '012345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return ''
+        case 'repo':
+          return 'repo'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Input \'owner\' is required.')
+  })
+
+  it('should set failed with no repo set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'token':
+          return 'test'
+        case 'state':
+          return 'success'
+        case 'context':
+          return 'context'
+        case 'description':
+          return 'description'
+        case 'sha':
+          return '012345678901234567890123456789abcdefabcd'
+        case 'owner':
+          return 'owner'
+        case 'repo':
+          return ''
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith('Input \'repo\' is required.')
+  })
+
 })
