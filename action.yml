@@ -3,6 +3,38 @@ description:
   'GitHub Action that enables updating a GitHub commit with a status check.'
 author: 'ukhomeoffice'
 
+inputs:
+  token:
+    description:
+      'GitHub Token to use for the status check. Defaults to GITHUB.TOKEN.'
+    required: false
+    default: ${{ github.token }}
+  state:
+    description:
+      'The state of the status check. One of success, error, failure, or
+      pending.'
+    required: true
+  context:
+    description: 'The name displayed for the status check.'
+    required: true
+  description:
+    description: 'A short description of the status check.'
+    required: false
+  sha:
+    description:
+      'The commit SHA to update with the status check. Defaults to GITHUB.SHA.'
+    required: false
+    default: ${{ github.sha }}
+  owner:
+    description:
+      'The owner of the repository. Defaults to GITHUB.REPOSITORY_OWNER.'
+    required: false
+    default: ${{ github.repository_owner }}
+  repo:
+    description: 'The repository name. Defaults to GITHUB.REPOSITORY_NAME.'
+    required: false
+    default: ${{ github.event.repository.name }}
+
 runs:
   using: node20
   main: dist/index.js

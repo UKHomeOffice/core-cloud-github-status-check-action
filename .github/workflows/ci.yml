@@ -47,6 +47,9 @@ jobs:
   test-action:
     name: GitHub Actions Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
 
     steps:
       - name: Checkout
@@ -56,3 +59,7 @@ jobs:
       - name: Test Local Action
         id: test-action
         uses: ./
+        with:
+          context: 'Test Action'
+          state: 'success'
+          sha: ${{ github.event.pull_request.head.sha }}
