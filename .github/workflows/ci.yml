@@ -62,4 +62,4 @@ jobs:
         with:
           context: 'Test Action'
           state: 'success'
-          sha: ${{ github.event.pull_request.head.sha }}
+          sha: ${{ github.event.pull_request.head.sha || github.sha }}
