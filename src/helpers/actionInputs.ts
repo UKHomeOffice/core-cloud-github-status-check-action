@@ -7,7 +7,7 @@ import * as core from '@actions/core'
 
 export interface ActionInputResult {
   token: string
-  state: string
+  state: 'success' | 'failure' | 'error' | 'pending'
   context: string
   description: string
   sha: string
@@ -70,7 +70,11 @@ export const ActionInputs = (): ActionInputResult => {
 
   return {
     token: parseInput('token', false, hasValue),
-    state: parseInput('state', true, hasValidState),
+    state: parseInput('state', true, hasValidState) as
+      | 'success'
+      | 'failure'
+      | 'error'
+      | 'pending',
     context: parseInput('context', true, hasValue),
     description: parseInput('description', false, () => true),
     sha: parseInput('sha', false, hasValidSha),

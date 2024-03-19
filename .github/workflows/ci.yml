@@ -60,6 +60,6 @@ jobs:
         id: test-action
         uses: ./
         with:
-          context: 'Test Action'
+          context: 'Test Action (${{ github.event_name }})'
           state: 'success'
-          sha: ${{ github.event.pull_request.head.sha }}
+          sha: ${{ github.event.pull_request.head.sha || github.sha }}
