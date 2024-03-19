@@ -1,5 +1,7 @@
 import * as core from '@actions/core'
 import { ActionInputResult, ActionInputs } from './helpers/actionInputs'
+import { GitHub } from './github'
+import { getOctokit } from '@actions/github'
 
 /**
  * The main function for the action.
@@ -7,10 +9,16 @@ import { ActionInputResult, ActionInputs } from './helpers/actionInputs'
  */
 export async function run(): Promise<void> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const inputs: ActionInputResult = ActionInputs()
 
-    // Perform computation
+    await GitHub(getOctokit(inputs.token)).createCommitStatus(
+      inputs.owner,
+      inputs.repo,
+      inputs.sha,
+      inputs.context,
+      inputs.state,
+      inputs.description
+    )
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
